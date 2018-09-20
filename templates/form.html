@@ -1,9 +1,8 @@
-<!DOCTYPE html5>
+<!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-
-        <title>User Sign-up Form</title>
+        <link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon">         <title>User Sign-up Form</title>
         <style>.error {color: red;} </style>
     </head>
 
@@ -14,16 +13,16 @@
 
         <main>
             <h1>Sign-up</h1>
-            <form method="POST"></form>
+            <form method="POST">
             <table>
                 <tbody>
                     <tr>
                         <td>
-                            <label for="username">Username</label>
+                            <label for="username">Username (3-20 Alpha characters only)</label>
                         </td>
                         <td>
-                            <input name="username" type="text" value="">
-                            <span class="error"></span>
+                            <input name="username" type="text" minlength="2" maxlength="20" value="{{username}}">
+                            <span class="error">{{username_error}}</span>
                         </td>
                     </tr>
                     <tr>
@@ -31,8 +30,8 @@
                             <label for="password">Password</label>
                         </td>
                         <td>
-                            <input name="password" type="password">
-                            <span class="error"></span>
+                            <input name="password" type="password" value="{{password}}">
+                            <span class="error">{{password_error}}</span>
                         </td>
                     </tr>
                     <tr>
@@ -40,8 +39,8 @@
                             <label for="verify">Verify Password</lable>
                         </td>
                         <td>
-                            <input name="verify" type="password">
-                            <span class="error"></span>
+                            <input name="verify" type="password" value="{{verify_password}}">
+                            <span class="error">{{verify_password_error}}</span>
                         </td>
                     </tr>
                     <tr>
@@ -49,21 +48,20 @@
                             <label for="email">Email (optional)</label>
                         </td>
                         <td>
-                            <input name="email" value="">
-                            <span class="error"></span>
+                            <input name="email" value="{{email}}" placeholder="you@example.com">
+                            <span class="error">{{email_error}}</span>
                         </td>
                     </tr>
                 </tbody>
             </table>
-                <input type="submit">
+                <input type="submit" value="Sign-up">
             </form>
         </main>
-        <div class="center">
+            <br><br><br><br>
             <footer>
                 Duane W. Reinhardt <br>
                 12808 Standbridge Dr, Riverview, FL 33579 | (757) 803-2042 | <a href="mailto:dwreinhardt75@outlook.com">dwreinhardt75@outlook.com</a>
             </footer>
-        </div>
    
 
 </html>
