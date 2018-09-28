@@ -25,9 +25,7 @@ def welcome():
     template = jinja_env.get_template('welcome.html')
     return template.render(username=username)
 
-
-
-#@app.route('/validate_entries')
+@app.route('/validate_entries')
 
 
 app.run()
