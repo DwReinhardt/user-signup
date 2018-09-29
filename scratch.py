@@ -1,74 +1,80 @@
-def validate_entries():
-
-    #intake user's inputs from form
-    username = request.form('username')
-    password = request.form('password')
-    verify_password = request.form('verify_password')
-    email = request.form('email')
-
-    #error messages
-    empty_field_error = "Field cannot be blank"
-    username_input_error = "Username must be 3-20 alpa characters only"
-    password_input_error = "password must be 3-20 characters only, no spaces"
-    password_mismatch_error = "Passwords do not match"
-
-    # Error variables
-    username_error = ''
-    password_error = ''
-    verify_password_error = ''
-    email_error = ''
-
-    #user input validation
-        #blank fields
-def is_empty(str):
-    if str == "":
-        return True
-    else:
-        return False
-
-    if username == '':
-        username_error = empty_field_error
-        return username_error
-    
-    if password == '':
-        password_error = empty_field_error
-        return password_error
-
-    if verify_password == '':
-        verify_password_error = empty_field_error
-        return verify_password_error
 
 
-
-    #invalid input: username & password
-def valid_user_pword(text):
-    if " " in text:
-        return False
-    if len(text) < 3 or len(text) > 20:
-        return False
-    return True
- 
-
-    #password & verify password mismatch
-    if not password == verify_password:
-        verify_password_error = password_mismatch_error
-        return verify_password_error
-
-    #invalid email
+'''
+#check for valid email address
+def email_valid(email):
     addressToVerify ='email'
     match = re.match('^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$', addressToVerify)
-
     if match == None:
-        print('Bad Syntax')
-        raise ValueError('Bad Syntax')
+        return False
+'''
+#@app.route('/', methods=['POST'])
+#def user_signup():
 
-    if not username_error and not password_error and not password_validate_error and not email_error:
-        username = username
-        return redirect('/welcome?username={0}'.format(username))
-    else:
-        return render_template('main.html', username_error=username_error, username=username, password_error=password_error, password=password, password_validate_error=password_validate_error, password_validate=password_validate, email_error=email_error, email=email)
 
-            username_error = ''
-    password_error = ''
-    verify_password_error = ''
-    email_error = ''
+
+'''
+'''
+
+
+'''
+# create route to validate the field entries
+@app.route('/validate_entries', methods=['POST'])
+def validate_entries():
+
+
+@app.route('/welcome', methods=['POST'])
+def welcome():
+    username = request.form['username']
+    template = jinja_env.get_template('welcome.html')
+    return template.render(username=username)
+
+@app.route('/validate_entries')
+'''
+#possible email error check
+# Address used for SMTP MAIL FROM command  
+fromAddress = 'corn@bt.com'
+
+# Simple Regex for syntax checking
+regex = '^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,})$'
+
+# Email address to verify
+inputAddress = input('Please enter the emailAddress to verify:')
+addressToVerify = str(inputAddress)
+
+# Syntax check
+match = re.match(regex, addressToVerify)
+if match == None:
+	print('Bad Syntax')
+	raise ValueError('Bad Syntax')
+
+# Get domain for DNS lookup
+splitAddress = addressToVerify.split('@')
+domain = str(splitAddress[1])
+print('Domain:', domain)
+
+# MX record lookup
+records = dns.resolver.query(domain, 'MX')
+mxRecord = records[0].exchange
+mxRecord = str(mxRecord)
+
+
+# SMTP lib setup (use debug level for full output)
+server = smtplib.SMTP()
+server.set_debuglevel(0)
+
+# SMTP Conversation
+server.connect(mxRecord)
+server.helo(server.local_hostname) ### server.local_hostname(Get local server hostname)
+server.mail(fromAddress)
+code, message = server.rcpt(str(addressToVerify))
+server.quit()
+
+#print(code)
+#print(message)
+
+# Assume SMTP response 250 is success
+if code == 250:
+	print('Success')
+else:
+print('Bad')
