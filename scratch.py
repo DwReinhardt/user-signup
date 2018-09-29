@@ -20,7 +20,7 @@ def validate_entries():
 
     #user input validation
         #blank fields
-    def is_empty(str):
+def is_empty(str):
     if str == "":
         return True
     else:
@@ -41,7 +41,7 @@ def validate_entries():
 
 
     #invalid input: username & password
-    def valid_user_pword(text):
+def valid_user_pword(text):
     if " " in text:
         return False
     if len(text) < 3 or len(text) > 20:

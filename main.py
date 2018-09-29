@@ -14,15 +14,15 @@ jinja_env = jinja2.Environment(
 app = Flask(__name__)
 app.config['DEBUG'] = True
 
-@app.route('/')
+@app.route('/user_signup')
 def index():
     template = jinja_env.get_template('form.html')
     return template.render()
 
 #user input validation functions
     #blank fields
-def is_empty(str):
-    if str == "":
+def is_empty(value):
+    if value:
         return True
     else:
         return False
@@ -34,28 +34,22 @@ def valid_user_pword(text):
     if len(text) < 3 or len(text) > 20:
         return False
     return True
-
-#password & verify password mismatch
-def pword_mismatch(text):
-    if not password == verify_password:
-        verify_password_error = password_mismatch_error
-        return verify_password_error
-
+'''
 #check for valid email address
 def email_valid(email):
     addressToVerify ='email'
     match = re.match('^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$', addressToVerify)
     if match == None:
         return False
-
-@app.route('/')
+'''
+@app.route('/user_signup', methods=['POST'])
 def user_signup():
 
     #intake user's inputs from form
-    username = request.form('username')
-    password = request.form('password')
-    verify_password = request.form('verify_password')
-    email = request.form('email')
+    username = request.form['username']
+    password = request.form['password']
+    verify_password = request.form['verify_password']
+    email = request.form['email']
 
     #declare error messages
     empty_field_error = "Field cannot be blank"
@@ -71,50 +65,43 @@ def user_signup():
 
 #fail checks
 # username
-    if is_empty(username):
+    if not is_empty(username):
         username_error = empty_field_error
         return username_error
 
 #password
-    if is_empty(str):
-
-#verify password
-    if is_empty(str):
-
-#email
-    if is_empty(str):
-
-    if valid_user_pword(text):
-
-    if pword_mismatch(text):
-
-    if email_valid(email):
-
-'''
-
-        
-    if password == '':
+    if not is_empty(password):
         password_error = empty_field_error
         return password_error
 
-    if verify_password == '':
-        verify_password_error = empty_field_error
-        return verify_password_error
-        #invalid input: username & password
-'''
+    if not valid_user_pword(password):
+        password_error = password_input_error
+        return password_error
 
+#verify password
+    if not is_empty(verify_password):
+       verify_password_error = empty_field_error
+       return verify_password_error
 
+    if not valid_user_pword(verify_password):
+        verify_password_error = password_input_error
+        return password_error
 
-    if not username_error and not password_error and not password_validate_error and not email_error:
+    if password != verify_password_error:
+        return password_mismatch_error
+
+#return errors or clear everything
+    if not username_error and not password_error and not verify_password_error and not email_error:
         username = username
+        username_error = ''
+        password_error = ''
+        verify_password_error = ''
+        email_error = ''
         return redirect('/welcome?username={0}'.format(username))
     else:
-        return render_template('main.html', username_error=username_error, username=username, password_error=password_error, password=password, password_validate_error=password_validate_error, password_validate=password_validate, email_error=email_error, email=email)
+        return template.render('form.html', username_error=username_error, username=username, password_error=password_error, password=password, password_validate_error=password_validate_error, password_validate=password_validate, email_error=email_error, email=email)
 
-            username_error = ''
-    password_error = ''
-    verify_password_error = ''
-    email_error = ''
+
 
 '''
 # create route to validate the field entries
@@ -127,12 +114,8 @@ def welcome():
     username = request.form['username']
     template = jinja_env.get_template('welcome.html')
     return template.render(username=username)
-<<<<<<< HEAD
 
 @app.route('/validate_entries')
-
-=======
 '''
->>>>>>> 7050adb3dc6ca068d1a56e08a8ee2a1f3c57b943
 
 app.run()
